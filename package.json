@@ -1,11 +1,14 @@
 {
   "name": "svelte-app",
   "version": "1.0.0",
+  "homepage": "https://rolandisimo.github.io/bs-bingo/",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public",
-    "validate": "svelte-check"
+    "validate": "svelte-check",
+    "predeploy": "npm run build",
+    "deploy": "npx gh-pages -d public/"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^16.0.0",
