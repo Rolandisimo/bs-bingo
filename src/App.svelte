@@ -1,45 +1,6 @@
 <script lang="ts">
-    import confetti from 'canvas-confetti';
-
-    const buzzWords = [
-        [
-            'OOP',
-            'Agile',
-            'Best practice',
-            'Clean code',
-            'Refactoring',
-        ],
-        [
-            'Scrum',
-            'Hack',
-            'Functional',
-            'Abstract',
-            'Motivated',
-        ],
-        [
-            'Driven',
-            'Patterns',
-            'Algorithms',
-            '80/20',
-            'Outstanding',
-        ],
-        [
-            'UML',
-            'Virtual',
-            'Cloud',
-            'Wizard',
-            'Domain',
-        ],
-        [
-            'Bug-free',
-            'Green',
-            'TDD',
-            'BDD',
-            'Extreme',
-        ],
-    ];
-
-    const wordsPerLine = buzzWords.length;
+    import { launchConfetti } from './confetti';
+    import { words, wordsPerLine } from './words';
 
     interface IndexProps {
         columnId: number | string;
@@ -125,19 +86,14 @@
             let wordIsOnTheLine = false;
             let isFilled = true;
 
-            for (let i = wordsPerLine - 1; i >= 0; i--) {
+            for (let i = 0; i < wordsPerLine; i++) {
                 const key = getWordKey({
-                    columnId: i,
+                    columnId: wordsPerLine - 1 - i,
                     wordId: i,
                 });
-                // console.log({
-                //     key,
-                //     i,
-                //     wordId,
-                //     columnId,
-                // })
+
                 if (!wordIsOnTheLine) {
-                    wordIsOnTheLine = +wordId === i && +columnId === i; 
+                    wordIsOnTheLine = +wordId === i && +columnId === wordsPerLine - 1 - i; 
                 }
 
                 isFilled = !!selectedWords[key];
@@ -148,7 +104,6 @@
 
             return wordIsOnTheLine && isFilled;
         }
-        
 
         if (
             isFilledHorizontally()
@@ -159,48 +114,10 @@
             launchConfetti();
         }
     }
-
-    function launchConfetti() {
-        const count = 200;
-        const defaults = {
-            origin: { y: 0.7 }
-        };
-
-        function fire(particleRatio, opts) {
-            confetti(Object.assign({}, defaults, opts, {
-                particleCount: Math.floor(count * particleRatio)
-            }));
-        }
-
-        fire(0.25, {
-            spread: 26,
-            startVelocity: 55,
-        });
-        fire(0.2, {
-            spread: 60,
-        });
-        fire(0.35, {
-            spread: 100,
-            decay: 0.91,
-            scalar: 0.8
-        });
-        fire(0.1, {
-            spread: 120,
-            startVelocity: 25,
-            decay: 0.92,
-            scalar: 1.2
-        });
-        fire(0.1, {
-            spread: 120,
-            startVelocity: 45,
-        });
-}
-
-
 </script>
 
 <div class="container">
-    {#each buzzWords as wordGroup, columnId}
+    {#each words as wordGroup, columnId}
         <div data-column-id={columnId}>
             {#each wordGroup as word, wordId}
                 <div
@@ -218,6 +135,10 @@
 
 
 <style lang="scss">
+    $selectedColor: rgb(196, 241, 230);
+    $hoverColor: darken($color: #fff, $amount: 5);
+    $mainLight: rgba(128, 128, 128, .28);
+
     :global(body) {
         display: flex;
         justify-content: center;
@@ -230,23 +151,32 @@
         margin: 0 auto;
         user-select: none;
         font-size: 2.4vw;
+
+        @media(min-width: 1080px) {
+            font-size: 1.8em;
+        }
     }
 
     .word {
-        border: 0.1em solid rgba(128, 128, 128, .28);
+        border: 0.1em solid $mainLight;
         padding: 1em;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
         text-align: center;
+        transition: background-color .1s, transform .1s;
 
         &:hover {
-            background-color: darken($color: #fff, $amount: 5);
+            background-color: $hoverColor;
+        }
+
+        &:active {
+            transform: scale(.9);
         }
 
         &.selected {
-            background-color: rgb(196, 241, 230);
+            background-color: $selectedColor;
         }
     }
 </style>
