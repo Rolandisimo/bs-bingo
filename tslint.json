@@ -1,6 +1,6 @@
 {
     "extends": ["tslint:recommended"],
-    "defaultSeverity": "warning",
+    "defaultSeverity": "error",
     "rules": {
         "no-unused-css": true,
         "prettier": true,
@@ -9,6 +9,7 @@
         "deprecation": {
             "severity": "warning"
         },
+        "quotemark": [true, "single"],
         "max-classes-per-file": false,
         "member-ordering": [
             true,
