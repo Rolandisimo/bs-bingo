@@ -116,12 +116,13 @@
     }
 </script>
 
-<div class="container">
+<div class="container" data-testid="container">
     {#each words as wordGroup, columnId}
         <div data-column-id={columnId}>
             {#each wordGroup as word, wordId}
                 <div
                     class="word"
+                    data-testid="word"
                     class:selected={selectedWords[getWordKey({ columnId, wordId })]}
                     on:click="{onWordClick}"
                     data-id={wordId}
