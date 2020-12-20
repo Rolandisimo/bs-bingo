@@ -1,25 +1,23 @@
 <script lang="ts">
+    export let words: string[][] = [];
+
     import Word from './components/Word.svelte';
-    import { words, getWordKey } from './helpers/words';
+    import { getWordKey } from './helpers/words';
     import type { IndexProps } from './helpers/words';
     import { isBingo } from './helpers/bingo';
     import { selectedWordsStore } from './selected-words.store';
 
     const onWordClick = ({ currentTarget }: TypedMouseEvent<HTMLDivElement>): void => {
-        const parent = currentTarget.parentElement;
-        const columnId = parent.dataset.columnId;
+        const columnId = currentTarget.parentElement.dataset.columnId;
         const wordId = currentTarget.dataset.id;
         const key = getWordKey({ columnId, wordId })
 
-        selectedWordsStore.setWord(
-            key,
-            !selectedWordsStore.isWordSelected(key),
-        )
+        selectedWordsStore.toggleWordState(key);
 
         isBingo({ columnId, wordId });
     }
 
-    function isWordSelected(options: IndexProps): boolean {
+    const isWordSelected = (options: IndexProps): boolean => {
         return selectedWordsStore.isWordSelected(getWordKey(options));
     }
 </script>
@@ -31,14 +29,13 @@
                 <Word
                     on:click={onWordClick}
                     name={word}
-                    isSelected={isWordSelected({ columnId, wordId })}
+                    isSelected={$selectedWordsStore && isWordSelected({ columnId, wordId })}
                     wordId={wordId}
                 />
             {/each}
         </div>
     {/each}
 </div>
-
 
 <style lang="scss">
     :global(body) {

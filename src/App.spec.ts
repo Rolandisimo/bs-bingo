@@ -8,9 +8,8 @@ describe('App', () => {
         expect(container).toBeTruthy();
     });
 
-    // FIXME:
-    test.skip('should highlight when clicked', async () => {
-        const results = render(App);
+    test('should highlight when clicked', async () => {
+        const results = render(App, { props: { words: [['TDD']]} });
         const word = (await results.getAllByTestId('word'))[0]
 
         expect(word.className.includes('selected')).toBeFalsy();
