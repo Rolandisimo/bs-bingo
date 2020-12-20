@@ -4,7 +4,7 @@
     "rules": {
         "no-unused-css": true,
         "prettier": true,
-        "cyclomatic-complexity": [true, 4],
+        "cyclomatic-complexity": [true, 6],
         "array-type": false,
         "deprecation": {
             "severity": "warning"

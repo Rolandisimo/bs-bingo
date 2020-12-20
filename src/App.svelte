@@ -1,134 +1,41 @@
 <script lang="ts">
-    import { launchConfetti } from './confetti';
-    import { words, wordsPerLine } from './words';
+    import Word from './components/Word.svelte';
+    import { words, getWordKey } from './helpers/words';
+    import type { IndexProps } from './helpers/words';
+    import { SelectedWordsService } from './selected-words.service';
+    import { isBingo } from './helpers/bingo';
 
-    interface IndexProps {
-        columnId: number | string;
-        wordId: number | string;
-    }
+    const selectedWordsService = SelectedWordsService.getInstance();
 
-    const selectedWords: { [key: string]: boolean } = {};
-
-    function getWordKey({ columnId, wordId }: IndexProps) {
-        return `${wordId}${columnId}`;
-    }
-
-    function onWordClick({ currentTarget }: TypedMouseEvent<HTMLDivElement>): void {
+    const onWordClick = ({ currentTarget }: TypedMouseEvent<HTMLDivElement>): void => {
         const parent = currentTarget.parentElement;
         const columnId = parent.dataset.columnId;
         const wordId = currentTarget.dataset.id;
         const key = getWordKey({ columnId, wordId })
-        selectedWords[key] = !selectedWords[key];
+
+        selectedWordsService.setWord(
+            key,
+            !selectedWordsService.getWord(key),
+        )
 
         isBingo({ columnId, wordId });
     }
 
-    function isBingo({ columnId, wordId }: IndexProps) {
-        function isFilledVertically(): boolean {
-            let isFilled = true;
-
-            for (let i = 0; i < wordsPerLine; i++) {
-                const key = getWordKey({
-                    columnId,
-                    wordId: i,
-                });
-                isFilled = !!selectedWords[key];
-
-                if (!isFilled) {
-                    break;
-                }
-            }
-
-            return isFilled;
-        }
-
-        function isFilledHorizontally(): boolean {
-            let isFilled = true;
-
-            for (let i = 0; i < wordsPerLine; i++) {
-                const key = getWordKey({
-                    columnId: i,
-                    wordId,
-                });
-                isFilled = !!selectedWords[key];
-                if (!isFilled) {
-                    break;
-                }
-            }
-
-            return isFilled;
-        }
-
-        function isFilledLTRDiagonally(): boolean {
-            let wordIsOnTheLine = false;
-            let isFilled = true;
-
-            for (let i = 0; i < wordsPerLine; i++) {
-                const key = getWordKey({
-                    columnId: i,
-                    wordId: i,
-                });
-
-                if (!wordIsOnTheLine) {
-                    wordIsOnTheLine = +wordId === i && +columnId === i; 
-                }
-
-                isFilled = !!selectedWords[key];
-                if (!isFilled) {
-                    break;
-                }
-            }
-
-            return wordIsOnTheLine && isFilled;
-        }
-        
-        function isFilledRTLDiagonally(): boolean {
-            let wordIsOnTheLine = false;
-            let isFilled = true;
-
-            for (let i = 0; i < wordsPerLine; i++) {
-                const key = getWordKey({
-                    columnId: wordsPerLine - 1 - i,
-                    wordId: i,
-                });
-
-                if (!wordIsOnTheLine) {
-                    wordIsOnTheLine = +wordId === i && +columnId === wordsPerLine - 1 - i; 
-                }
-
-                isFilled = !!selectedWords[key];
-                if (!isFilled) {
-                    break;
-                }
-            }
-
-            return wordIsOnTheLine && isFilled;
-        }
-
-        if (
-            isFilledHorizontally()
-            || isFilledVertically()
-            || isFilledRTLDiagonally()
-            || isFilledLTRDiagonally()
-        ) {
-            launchConfetti();
-        }
+    function isWordSelected(options: IndexProps) {
+        return selectedWordsService.getWord(getWordKey(options));
     }
 </script>
-
+<!-- FIXME: selected words need to be put in a store -->
 <div class="container" data-testid="container">
     {#each words as wordGroup, columnId}
         <div data-column-id={columnId}>
             {#each wordGroup as word, wordId}
-                <div
-                    class="word"
-                    data-testid="word"
-                    class:selected={selectedWords[getWordKey({ columnId, wordId })]}
-                    on:click="{onWordClick}"
-                    data-id={wordId}
-                >
-                    {word}
-                </div>
+                <Word
+                    on:click={onWordClick}
+                    name={word}
+                    isSelected={isWordSelected({ columnId, wordId })}
+                    wordId={wordId}
+                />
             {/each}
         </div>
     {/each}
@@ -136,10 +43,6 @@
 
 
 <style lang="scss">
-    $selectedColor: rgb(196, 241, 230);
-    $hoverColor: darken($color: #fff, $amount: 5);
-    $mainLight: rgba(128, 128, 128, .28);
-
     :global(body) {
         display: flex;
         justify-content: center;
@@ -155,29 +58,6 @@
 
         @media(min-width: 1080px) {
             font-size: 1.8em;
-        }
-    }
-
-    .word {
-        border: 0.1em solid $mainLight;
-        padding: 1em;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        text-align: center;
-        transition: background-color .1s, transform .1s;
-
-        &:hover {
-            background-color: $hoverColor;
-        }
-
-        &:active {
-            transform: scale(.9);
-        }
-
-        &.selected {
-            background-color: $selectedColor;
         }
     }
 </style>

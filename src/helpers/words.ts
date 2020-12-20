@@ -1,3 +1,8 @@
+export interface IndexProps {
+    columnId: number | string;
+    wordId: number | string;
+}
+
 export const words = [
     [
         'OOP',
@@ -37,3 +42,7 @@ export const words = [
 ];
 
 export const wordsPerLine = words.length;
+
+export function getWordKey({ columnId, wordId }: IndexProps): string {
+    return `${wordId}${columnId}`;
+}
