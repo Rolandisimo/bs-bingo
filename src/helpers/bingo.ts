@@ -1,8 +1,6 @@
-import { SelectedWordsService } from '../selected-words.service';
+import { selectedWordsStore } from '../selected-words.store';
 import { launchConfetti } from './confetti';
 import { getWordKey, IndexProps, wordsPerLine } from './words';
-
-const selectedWordsService = SelectedWordsService.getInstance();
 
 export function isBingo({ columnId, wordId }: IndexProps): boolean {
     function isFilledVertically(): boolean {
@@ -13,7 +11,7 @@ export function isBingo({ columnId, wordId }: IndexProps): boolean {
                 columnId,
                 wordId: i,
             });
-            isFilled = selectedWordsService.getWord(key);
+            isFilled = selectedWordsStore.isWordSelected(key);
 
             if (!isFilled) {
                 break;
@@ -31,7 +29,7 @@ export function isBingo({ columnId, wordId }: IndexProps): boolean {
                 columnId: i,
                 wordId,
             });
-            isFilled = selectedWordsService.getWord(key);
+            isFilled = selectedWordsStore.isWordSelected(key);
             if (!isFilled) {
                 break;
             }
@@ -54,7 +52,7 @@ export function isBingo({ columnId, wordId }: IndexProps): boolean {
                 wordIsOnTheLine = +wordId === i && +columnId === i;
             }
 
-            isFilled = selectedWordsService.getWord(key);
+            isFilled = selectedWordsStore.isWordSelected(key);
             if (!isFilled) {
                 break;
             }
@@ -77,7 +75,7 @@ export function isBingo({ columnId, wordId }: IndexProps): boolean {
                 wordIsOnTheLine = +wordId === i && +columnId === wordsPerLine - 1 - i;
             }
 
-            isFilled = selectedWordsService.getWord(key);
+            isFilled = selectedWordsStore.isWordSelected(key);
             if (!isFilled) {
                 break;
             }

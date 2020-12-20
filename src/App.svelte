@@ -2,10 +2,8 @@
     import Word from './components/Word.svelte';
     import { words, getWordKey } from './helpers/words';
     import type { IndexProps } from './helpers/words';
-    import { SelectedWordsService } from './selected-words.service';
     import { isBingo } from './helpers/bingo';
-
-    const selectedWordsService = SelectedWordsService.getInstance();
+    import { selectedWordsStore } from './selected-words.store';
 
     const onWordClick = ({ currentTarget }: TypedMouseEvent<HTMLDivElement>): void => {
         const parent = currentTarget.parentElement;
@@ -13,19 +11,19 @@
         const wordId = currentTarget.dataset.id;
         const key = getWordKey({ columnId, wordId })
 
-        selectedWordsService.setWord(
+        selectedWordsStore.setWord(
             key,
-            !selectedWordsService.getWord(key),
+            !selectedWordsStore.isWordSelected(key),
         )
 
         isBingo({ columnId, wordId });
     }
 
-    function isWordSelected(options: IndexProps) {
-        return selectedWordsService.getWord(getWordKey(options));
+    function isWordSelected(options: IndexProps): boolean {
+        return selectedWordsStore.isWordSelected(getWordKey(options));
     }
 </script>
-<!-- FIXME: selected words need to be put in a store -->
+
 <div class="container" data-testid="container">
     {#each words as wordGroup, columnId}
         <div data-column-id={columnId}>
