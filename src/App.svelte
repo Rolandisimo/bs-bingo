@@ -20,8 +20,6 @@
     const isWordSelected = (options: IndexProps): boolean => {
         return selectedWordsStore.isWordSelected(getWordKey(options));
     }
-
-    $: console.log($selectedWordsStore);
 </script>
 
 <button
