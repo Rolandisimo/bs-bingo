@@ -9,7 +9,7 @@ interface SelectedWordsStore extends Writable<Words> {
 }
 
 function createSelectedWordsStore(): SelectedWordsStore {
-  const state: Words = {};
+  let state: Words = {};
   const store: Writable<Words> = writable(state);
 
   return {
@@ -20,13 +20,16 @@ function createSelectedWordsStore(): SelectedWordsStore {
     },
 
     toggleWordState: (key: string) => {
-      store.update((words) => {
-        words[key] = !words[key];
-        return words;
+      store.update(() => {
+        state[key] = !state[key];
+        return state;
       });
     },
 
-    reset: () => store.set({}),
+    reset: () => {
+      state = {};
+      store.set({})
+    },
   }
 }
 

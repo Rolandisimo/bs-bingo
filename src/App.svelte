@@ -22,6 +22,14 @@
     }
 </script>
 
+<button
+    data-testid="resetButton"
+    class="resetButton"
+    on:click={selectedWordsStore.reset}
+>
+    Reset
+</button>
+
 <div class="container" data-testid="container">
     {#each words as wordGroup, columnId}
         <div data-column-id={columnId}>
@@ -54,5 +62,15 @@
         @media(min-width: 1080px) {
             font-size: 1.8em;
         }
+    }
+
+    .resetButton {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+        padding: .5em 1em;
+        font-size: 2em;
     }
 </style>
