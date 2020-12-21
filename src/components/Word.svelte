@@ -40,5 +40,9 @@
         &.selected {
             background-color: $selectedColor;
         }
+
+        @media (max-width: 728px) {
+            padding: 3em 1em;
+        }
     }
 </style>

@@ -69,5 +69,8 @@
         top: 10%;
         left: 50%;
         transform: translateX(-50%);
+        background-color: white;
+        padding: .5em 1em;
+        font-size: 2em;
     }
 </style>
