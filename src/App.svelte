@@ -17,7 +17,7 @@
             Reset
         </button>
 
-        <Link to="">
+        <Link to="/">
             <button
                 data-testid="resetButton"
                 class="resetButton"
@@ -26,7 +26,7 @@
             </button>
         </Link>
 
-        <Link to="about">
+        <Link to="/about">
             <button
                 data-testid="resetButton"
                 class="resetButton"
@@ -37,8 +37,8 @@
 
     </div>
 
-    <Route path="about" component={About} />
-    <Route path="">
+    <Route path="/about" component={About} />
+    <Route path="/">
         <Home words={words} />
     </Route>
 </Router>
