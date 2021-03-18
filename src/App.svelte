@@ -9,15 +9,7 @@
 
 <Router>
     <div class="buttonContainer">
-        <button
-            data-testid="resetButton"
-            class="resetButton"
-            on:click={selectedWordsStore.reset}
-        >
-            Reset
-        </button>
-
-        <Link to="/">
+        <Link to="/bs-bingo/">
             <button
                 data-testid="resetButton"
                 class="resetButton"
@@ -26,7 +18,7 @@
             </button>
         </Link>
 
-        <Link to="/about">
+        <Link to="/bs-bingo/about">
             <button
                 data-testid="resetButton"
                 class="resetButton"
@@ -34,11 +26,20 @@
                 About
             </button>
         </Link>
-
     </div>
 
-    <Route path="/about" component={About} />
-    <Route path="/">
+    <div class="buttonContainer">
+        <button
+            data-testid="resetButton"
+            class="resetButton"
+            on:click={selectedWordsStore.reset}
+        >
+            Reset
+        </button>
+    </div>
+
+    <Route path="/bs-bingo/about" component={About} />
+    <Route path="/bs-bingo/">
         <Home words={words} />
     </Route>
 </Router>
