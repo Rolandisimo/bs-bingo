@@ -1,9 +1,11 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
+    "extends": "@tsconfig/svelte/tsconfig.json",
 
-  "include": ["src/**/*"],
-  "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
-  "compilerOptions": {
-    "types": ["jest"]
-  }
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
+    "compilerOptions": {
+        "types": ["jest", "cypress"],
+        "target": "es6",
+        "lib": ["es6", "dom"]
+    }
 }
